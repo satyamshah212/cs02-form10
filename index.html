@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CS-02 Positive Form 10</title>
-<meta name="description" content="Nominate a CS-02 cadet for a positive AFCW Form 10.">
+<meta name="description" content="Nominate a CS-02 cadet for a positive AFCW Form 10 in four questions.">
+<meta name="theme-color" content="#0F172A">
 <!-- ===== SETTINGS: update the email when the acting First Sergeant changes ===== -->
 <script>
   window.FORM10_CONFIG = {
@@ -12,124 +13,278 @@
     firstSergeantEmail: "c29satyam.shah@afacademy.af.edu"
   };
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  /* Design system: ui-ux-pro-max "Minimalism & Swiss" + Government navy palette, Atkinson Hyperlegible. */
   :root {
-    --bg: #f4f6fa; --card: #ffffff; --text: #14213d; --muted: #5b6577;
-    --line: #d8dee8; --accent: #1d4ed8; --accent-ink: #ffffff; --ok: #0f7b4a;
-    --err: #b42318; --field: #ffffff; --hint-bg: #eef2ff;
+    --bg: #F8FAFC; --card: #FFFFFF; --ink: #020617; --ink-2: #334155; --muted: #475569;
+    --line: #E2E8F0; --line-strong: #CBD5E1; --primary: #0F172A; --on-primary: #FFFFFF;
+    --accent: #0369A1; --accent-soft: #E0F2FE; --ok: #15803D; --ok-soft: #DCFCE7;
+    --err: #DC2626; --err-soft: #FEF2F2; --field: #FFFFFF; --ring: #0369A1;
+    --radius: 10px; --radius-lg: 14px;
+    --ease: cubic-bezier(.2, .7, .2, 1);
+    --font: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0d1220; --card: #151c2e; --text: #e7ecf5; --muted: #9aa6bb;
-      --line: #2a3550; --accent: #6b93ff; --accent-ink: #0d1220; --ok: #4ade80;
-      --err: #f87171; --field: #0f1626; --hint-bg: #1b2440;
+      --bg: #020617; --card: #0F172A; --ink: #F1F5F9; --ink-2: #CBD5E1; --muted: #94A3B8;
+      --line: #1E293B; --line-strong: #334155; --primary: #F1F5F9; --on-primary: #020617;
+      --accent: #38BDF8; --accent-soft: #0C2A3E; --ok: #4ADE80; --ok-soft: #052E16;
+      --err: #F87171; --err-soft: #2A0A0A; --field: #020617; --ring: #38BDF8;
     }
   }
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
-    margin: 0; background: var(--bg); color: var(--text);
-    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 400 17px/1.55 var(--font);
   }
-  main { max-width: 560px; margin: 0 auto; padding: 24px 16px 48px; }
-  header { margin-bottom: 20px; }
-  .tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .06em;
-         text-transform: uppercase; color: var(--accent); }
-  h1 { font-size: 26px; line-height: 1.2; margin: 4px 0 8px; }
-  header p { margin: 0; color: var(--muted); }
-  form, .result { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
-  .q { margin-bottom: 20px; }
-  .q:last-of-type { margin-bottom: 24px; }
-  label { display: block; font-weight: 600; margin-bottom: 6px; }
-  .num { color: var(--accent); margin-right: 4px; }
-  .help { font-size: 14px; color: var(--muted); margin: -2px 0 8px; }
+  main {
+    max-width: 600px; margin: 0 auto;
+    padding: max(28px, env(safe-area-inset-top)) 16px max(40px, env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Header ---------- */
+  .masthead { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+  .mark {
+    width: 44px; height: 44px; border-radius: 10px; flex: none;
+    display: grid; place-items: center; background: var(--primary); color: var(--on-primary);
+    font-weight: 700; font-size: 13px; letter-spacing: .04em;
+  }
+  .masthead .unit { font-weight: 700; font-size: 15px; line-height: 1.2; }
+  .masthead .sub { font-size: 14px; color: var(--muted); line-height: 1.3; }
+  h1 { font-size: clamp(28px, 7vw, 36px); line-height: 1.1; letter-spacing: -.015em; margin: 0 0 10px; }
+  .lede { margin: 0 0 22px; color: var(--ink-2); max-width: 34em; }
+
+  /* ---------- Progress ---------- */
+  .progress { margin: 0 0 14px; }
+  .progress-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+  .progress-row b { color: var(--ink); }
+  .bar { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; width: 0; background: var(--accent); border-radius: inherit; transition: width .3s var(--ease); }
+
+  /* ---------- Card + questions ---------- */
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 8px 20px 20px; }
+  .q { padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .q:last-of-type { border-bottom: 0; }
+  .q-head { display: flex; gap: 12px; align-items: flex-start; }
+  .num {
+    flex: none; width: 28px; height: 28px; border-radius: 50%; margin-top: 1px;
+    display: grid; place-items: center; font-size: 14px; font-weight: 700;
+    border: 1.5px solid var(--line-strong); color: var(--muted);
+    transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
+  }
+  .q.done .num { background: var(--accent); border-color: var(--accent); color: var(--card); }
+  .q.done .num .n { display: none; }
+  .q:not(.done) .num svg { display: none; }
+  .q-body { flex: 1; min-width: 0; }
+  label { display: block; font-weight: 700; font-size: 17px; line-height: 1.3; }
+  .help { font-size: 15px; color: var(--muted); margin: 3px 0 10px; }
   input, textarea {
-    width: 100%; font: inherit; color: var(--text); background: var(--field);
-    border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+    width: 100%; font: inherit; font-size: 17px; color: var(--ink); background: var(--field);
+    border: 1.5px solid var(--line-strong); border-radius: var(--radius); padding: 12px 14px; min-height: 48px;
+    transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
   }
-  textarea { min-height: 140px; resize: vertical; }
-  input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
-  .preview { font-size: 13px; color: var(--muted); margin-top: 6px; min-height: 1em; }
-  .preview b { color: var(--text); font-weight: 600; }
-  .error { color: var(--err); font-size: 14px; margin-top: 6px; }
-  button, .btn {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    width: 100%; font: inherit; font-weight: 600; padding: 14px 16px; border-radius: 10px;
-    border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink);
-    cursor: pointer; text-decoration: none; margin-top: 10px;
+  textarea { min-height: 136px; resize: vertical; display: block; }
+  input::placeholder, textarea::placeholder { color: var(--muted); opacity: .75; }
+  input:hover, textarea:hover { border-color: var(--muted); }
+  input:focus-visible, textarea:focus-visible { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 28%, transparent); }
+  [aria-invalid="true"] { border-color: var(--err) !important; background: var(--err-soft); }
+  .meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 7px; font-size: 14px; color: var(--muted); min-height: 1.2em; }
+  .preview b { color: var(--ink); }
+  .count { flex: none; font-variant-numeric: tabular-nums; }
+  .error { display: flex; gap: 6px; align-items: flex-start; color: var(--err); font-size: 15px; margin-top: 7px; }
+  .error svg { flex: none; margin-top: 2px; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; min-height: 52px; padding: 12px 18px; margin-top: 10px;
+    font: inherit; font-size: 17px; font-weight: 700; text-decoration: none; cursor: pointer;
+    border-radius: var(--radius); border: 1.5px solid var(--primary);
+    background: var(--primary); color: var(--on-primary);
+    transition: transform .15s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease);
   }
-  .btn.secondary { background: transparent; color: var(--accent); }
-  button:disabled { opacity: .6; cursor: wait; }
-  .result h2 { margin: 0 0 4px; font-size: 20px; color: var(--ok); }
-  .result p { margin: 0 0 8px; }
-  .file { font-family: ui-monospace, Consolas, monospace; font-size: 13px; word-break: break-all; color: var(--muted); }
-  .steps { background: var(--hint-bg); border-radius: 10px; padding: 12px 14px; font-size: 14px; margin: 14px 0 4px; }
-  .steps ol { margin: 6px 0 0; padding-left: 20px; }
-  .email { font-weight: 600; word-break: break-all; }
-  footer { margin-top: 24px; font-size: 13px; color: var(--muted); text-align: center; }
+  .btn:hover { box-shadow: 0 4px 14px -6px color-mix(in srgb, var(--primary) 60%, transparent); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0) scale(.985); box-shadow: none; }
+  .btn.secondary { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+  .btn.secondary:hover { border-color: var(--ink-2); box-shadow: none; }
+  .btn.quiet { background: transparent; border-color: transparent; color: var(--accent); min-height: 48px; }
+  .btn.quiet:hover { box-shadow: none; text-decoration: underline; text-underline-offset: 3px; }
+  .btn:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+  .btn:disabled { opacity: .65; cursor: progress; transform: none; }
+  .spinner { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid currentColor; border-right-color: transparent; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .submit-wrap { margin-top: 18px; }
+  .submit-note { font-size: 14px; color: var(--muted); text-align: center; margin: 10px 0 0; }
+
+  /* ---------- Error summary ---------- */
+  .summary { border: 1.5px solid var(--err); background: var(--err-soft); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 14px; }
+  .summary:focus { outline: 3px solid var(--ring); outline-offset: 2px; }
+  .summary h2 { font-size: 16px; margin: 0 0 6px; color: var(--err); }
+  .summary ul { margin: 0; padding-left: 18px; }
+  .summary li { padding: 4px 0; font-size: 15px; line-height: 1.4; }
+  .summary a { color: var(--ink); text-underline-offset: 3px; }
+
+  /* ---------- Result ---------- */
+  .result { text-align: left; }
+  .ok-badge { width: 52px; height: 52px; border-radius: 50%; background: var(--ok-soft); color: var(--ok); display: grid; place-items: center; margin: 12px 0 14px; }
+  .result h2 { font-size: 26px; line-height: 1.15; margin: 0 0 6px; }
+  .result .lede { margin-bottom: 16px; }
+  .file { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); }
+  .file svg { flex: none; color: var(--err); }
+  .file .fname { font-weight: 700; font-size: 15px; word-break: break-all; line-height: 1.3; }
+  .file .fmeta { font-size: 14px; color: var(--muted); }
+  .to { margin: 18px 0 4px; padding: 14px; border-radius: var(--radius); background: var(--accent-soft); }
+  .to .k { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+  .to .v { font-weight: 700; font-size: 15px; overflow-wrap: anywhere; margin: 2px 0 8px; }
+  .to ol { margin: 0; padding-left: 20px; font-size: 15px; color: var(--ink-2); }
+  .to li + li { margin-top: 4px; }
+  .actions { margin-top: 8px; }
+
+  footer { margin-top: 26px; font-size: 14px; color: var(--muted); display: flex; gap: 10px; align-items: flex-start; }
+  footer svg { flex: none; margin-top: 2px; }
+
+  /* ---------- Motion ---------- */
+  [data-enter] { animation: enter .5s var(--ease) both; }
+  [data-enter="2"] { animation-delay: .06s; }
+  [data-enter="3"] { animation-delay: .12s; }
+  @keyframes enter { from { opacity: 0; transform: translateY(10px); } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
   [hidden] { display: none !important; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 </head>
 <body>
+<!-- Inline SVG icons (Lucide, ISC licence) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 13h4M10 17h4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4"/><path d="M12 2v13"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></symbol>
+</svg>
+
 <main>
-  <header>
-    <span class="tag" id="sqTag">CS-02</span>
-    <h1>Positive Form 10 nomination</h1>
-    <p>Saw a cadet do something worth recognizing? Answer 4 questions. Your phone fills in the AFCW Form 10, and you send it to the First Sergeant.</p>
+  <header data-enter>
+    <div class="masthead">
+      <div class="mark" aria-hidden="true"><svg width="22" height="22"><use href="#i-award"/></svg></div>
+      <div>
+        <div class="unit" id="sqTag">CS-02</div>
+        <div class="sub">Positive AFCW Form 10</div>
+      </div>
+    </div>
+    <h1 id="pageTitle">Recognize a cadet in four questions</h1>
+    <p class="lede" id="pageLede">Your phone fills in the Form 10 for you. Then you send the PDF to the acting First Sergeant.</p>
   </header>
 
   <!-- onsubmit guard: the form must never submit natively (that would put answers in the URL). -->
-  <form id="nomForm" novalidate action="javascript:void 0" onsubmit="event.preventDefault()">
-    <div class="q">
-      <label for="submitter"><span class="num">1.</span>Your rank and name</label>
-      <p class="help">Example: C2C John A. Doe</p>
-      <input id="submitter" name="submitter" autocomplete="name" placeholder="C2C John Doe" required>
-      <div class="preview" id="submitterPreview"></div>
-      <div class="error" id="submitterErr" hidden></div>
+  <form id="nomForm" novalidate action="javascript:void 0" onsubmit="event.preventDefault()" data-enter="2">
+    <div class="progress" aria-hidden="true">
+      <div class="progress-row"><span><b id="doneCount">0</b> of 4 answered</span><span>About a minute</span></div>
+      <div class="bar"><span id="barFill"></span></div>
     </div>
 
-    <div class="q">
-      <label for="nominee"><span class="num">2.</span>Rank and name of the cadet you're nominating</label>
-      <p class="help">Example: C3C Jane Smith</p>
-      <input id="nominee" name="nominee" placeholder="C3C Jane Smith" required>
-      <div class="preview" id="nomineePreview"></div>
-      <div class="error" id="nomineeErr" hidden></div>
+    <div class="summary" id="summary" role="alert" tabindex="-1" aria-labelledby="summaryTitle" hidden>
+      <h2 id="summaryTitle">Fix these before creating the Form 10</h2>
+      <ul id="summaryList"></ul>
     </div>
 
-    <div class="q">
-      <label for="activity"><span class="num">3.</span>What did they do?</label>
-      <p class="help">Who, what, when, where, and why it mattered.</p>
-      <textarea id="activity" name="activity" required></textarea>
-      <div class="error" id="activityErr" hidden></div>
+    <div class="card">
+      <div class="q" id="q-submitter">
+        <div class="q-head">
+          <span class="num" aria-hidden="true"><span class="n">1</span><svg width="14" height="14"><use href="#i-check"/></svg></span>
+          <div class="q-body">
+            <label for="submitter">Your rank and name</label>
+            <p class="help" id="submitterHelp">For example, C2C John A. Doe</p>
+            <input id="submitter" name="submitter" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="C2C John Doe" aria-describedby="submitterHelp submitterPreview submitterErr" required>
+            <div class="meta"><span class="preview" id="submitterPreview" aria-live="polite"></span></div>
+            <div class="error" id="submitterErr" hidden><svg width="16" height="16" aria-hidden="true"><use href="#i-alert"/></svg><span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q" id="q-nominee">
+        <div class="q-head">
+          <span class="num" aria-hidden="true"><span class="n">2</span><svg width="14" height="14"><use href="#i-check"/></svg></span>
+          <div class="q-body">
+            <label for="nominee">Rank and name of the cadet you're nominating</label>
+            <p class="help" id="nomineeHelp">For example, C3C Jane Smith</p>
+            <input id="nominee" name="nominee" autocomplete="off" autocapitalize="words" enterkeyhint="next" placeholder="C3C Jane Smith" aria-describedby="nomineeHelp nomineePreview nomineeErr" required>
+            <div class="meta"><span class="preview" id="nomineePreview" aria-live="polite"></span></div>
+            <div class="error" id="nomineeErr" hidden><svg width="16" height="16" aria-hidden="true"><use href="#i-alert"/></svg><span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q" id="q-activity">
+        <div class="q-head">
+          <span class="num" aria-hidden="true"><span class="n">3</span><svg width="14" height="14"><use href="#i-check"/></svg></span>
+          <div class="q-body">
+            <label for="activity">What did they do?</label>
+            <p class="help" id="activityHelp">Who, what, when, where, and why it mattered.</p>
+            <textarea id="activity" name="activity" autocapitalize="sentences" aria-describedby="activityHelp activityErr" required></textarea>
+            <div class="meta"><span></span><span class="count" id="activityCount">0 characters</span></div>
+            <div class="error" id="activityErr" hidden><svg width="16" height="16" aria-hidden="true"><use href="#i-alert"/></svg><span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q" id="q-reward">
+        <div class="q-head">
+          <span class="num" aria-hidden="true"><span class="n">4</span><svg width="14" height="14"><use href="#i-check"/></svg></span>
+          <div class="q-body">
+            <label for="reward">Recommended reward</label>
+            <p class="help" id="rewardHelp">For example, 1 weekend pass</p>
+            <input id="reward" name="reward" autocapitalize="sentences" enterkeyhint="done" placeholder="1 weekend pass" aria-describedby="rewardHelp rewardErr" required>
+            <div class="error" id="rewardErr" hidden><svg width="16" height="16" aria-hidden="true"><use href="#i-alert"/></svg><span></span></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="q">
-      <label for="reward"><span class="num">4.</span>Recommended reward</label>
-      <input id="reward" name="reward" placeholder="e.g., 1 weekend pass" required>
-      <div class="error" id="rewardErr" hidden></div>
+    <div class="submit-wrap">
+      <button type="submit" class="btn" id="submitBtn"><svg width="20" height="20" aria-hidden="true"><use href="#i-file"/></svg><span>Create Form 10</span></button>
+      <div class="error" id="buildErr" hidden><svg width="16" height="16" aria-hidden="true"><use href="#i-alert"/></svg><span></span></div>
+      <p class="submit-note">You'll review the file before anything is sent.</p>
     </div>
-
-    <button type="submit" id="submitBtn">Create Form 10</button>
-    <div class="error" id="buildErr" hidden></div>
   </form>
 
-  <section class="result" id="result" hidden>
-    <h2>Form 10 ready</h2>
-    <p class="file" id="fileName"></p>
+  <section class="card result" id="result" hidden aria-labelledby="resultTitle">
+    <div class="ok-badge" aria-hidden="true"><svg width="26" height="26"><use href="#i-check"/></svg></div>
+    <h2 id="resultTitle" tabindex="-1">Your Form 10 is ready</h2>
+    <p class="lede">One step left: send it to the acting First Sergeant.</p>
 
-    <div class="steps">
-      <strong>Send it to the acting First Sergeant:</strong>
-      <span class="email" id="fsEmail"></span>
+    <div class="file">
+      <svg width="28" height="28" aria-hidden="true"><use href="#i-file"/></svg>
+      <div><div class="fname" id="fileName"></div><div class="fmeta" id="fileMeta">PDF · AFCW IMT 10</div></div>
+    </div>
+
+    <div class="to">
+      <div class="k">Send to</div>
+      <div class="v" id="fsEmail"></div>
       <ol id="stepList"></ol>
     </div>
 
-    <button type="button" id="shareBtn" hidden>Share PDF (Outlook, Teams…)</button>
-    <a class="btn" id="downloadBtn" download>Download PDF</a>
-    <a class="btn secondary" id="emailBtn">Open email to First Sergeant</a>
-    <button type="button" class="btn secondary" id="againBtn">Nominate someone else</button>
+    <div class="actions">
+      <button type="button" class="btn" id="shareBtn" hidden><svg width="20" height="20" aria-hidden="true"><use href="#i-share"/></svg><span>Share PDF to Outlook or Teams</span></button>
+      <a class="btn" id="downloadBtn" download><svg width="20" height="20" aria-hidden="true"><use href="#i-download"/></svg><span>Download PDF</span></a>
+      <a class="btn secondary" id="emailBtn"><svg width="20" height="20" aria-hidden="true"><use href="#i-mail"/></svg><span>Open email to First Sergeant</span></a>
+      <button type="button" class="btn quiet" id="againBtn"><svg width="18" height="18" aria-hidden="true"><use href="#i-plus"/></svg><span>Nominate someone else</span></button>
+    </div>
   </section>
 
-  <footer>
-    Unofficial squadron tool. The PDF is built on your phone. Nothing is saved or sent anywhere until you send it yourself.
+  <footer data-enter="3">
+    <svg width="16" height="16" aria-hidden="true"><use href="#i-lock"/></svg>
+    <span>Unofficial squadron tool. The PDF is built on your phone. Nothing is saved or sent anywhere until you send it yourself.</span>
   </footer>
 </main>
 
@@ -159,7 +314,7 @@
   // ---------- Rank + name parsing ----------
   const RANKS = [
     ["C1C"], ["C2C"], ["C3C"], ["C4C"],
-    ["2d Lt", "2nd Lt", "2Lt", "2d Lt."], ["1st Lt", "1Lt"], ["Capt"], ["Maj"], ["Lt Col", "LtCol"], ["Col"],
+    ["2d Lt", "2nd Lt", "2Lt"], ["1st Lt", "1Lt"], ["Capt"], ["Maj"], ["Lt Col", "LtCol"], ["Col"],
     ["Brig Gen"], ["Maj Gen"], ["Lt Gen"], ["Gen"],
     ["CMSgt"], ["SMSgt"], ["MSgt"], ["TSgt"], ["SSgt"], ["SrA"], ["A1C"], ["Amn"],
     ["Mr."], ["Ms."], ["Mrs."], ["Dr."]
@@ -167,14 +322,12 @@
   const norm = s => s.toLowerCase().replace(/[.\s]/g, "");
   const RANK_LOOKUP = [];
   RANKS.forEach(group => group.forEach(v => RANK_LOOKUP.push({ key: norm(v), canon: group[0] })));
-  RANK_LOOKUP.sort((a, b) => b.key.length - a.key.length);
 
   function parsePerson(raw) {
     const text = raw.trim().replace(/\s+/g, " ");
     if (!text) return null;
     const words = text.split(" ");
     let rank = "", rest = words;
-    // Try 1- and 2-word rank prefixes, longest first.
     for (const n of [2, 1]) {
       if (words.length <= n) continue;
       const cand = norm(words.slice(0, n).join(" "));
@@ -201,33 +354,80 @@
     const gradYear = now.getMonth() >= 5 ? now.getFullYear() + 1 : now.getFullYear();
     return String(gradYear + (Number(m[1]) - 1));
   }
-
-  function showPreview(inputId, previewId, isNominee) {
-    const p = parsePerson($(inputId).value);
-    const el = $(previewId);
-    if (!p || !p.ok) { el.textContent = ""; return; }
-    let txt = `On the form: <b>${esc(p.formal)}</b>`;
-    if (p.rank) txt += isNominee ? ` · Class of <b>${classYearFor(p.rank) || "—"}</b>` : ` · Grade <b>${esc(p.rank)}</b>`;
-    else txt += " · <span style='color:var(--err)'>no rank recognized</span>";
-    el.innerHTML = txt;
-  }
   const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-  $("submitter").addEventListener("input", () => showPreview("submitter", "submitterPreview", false));
-  $("nominee").addEventListener("input", () => showPreview("nominee", "nomineePreview", true));
+  // ---------- Per-question rules ----------
+  const Q = {
+    submitter: v => { const p = parsePerson(v); return p && p.ok && p.rank ? "" : "Enter your rank, then your first and last name (for example, C2C John Doe)."; },
+    nominee:   v => { const p = parsePerson(v); return p && p.ok && /^C[1-4]C$/.test(p.rank) ? "" : "Enter the cadet's class rank (C1C to C4C), then first and last name."; },
+    activity:  v => v.trim().length >= 15 ? "" : "Add a sentence or two about what they did.",
+    reward:    v => v.trim() ? "" : "Enter a recommended reward."
+  };
+  const touched = {};
 
-  // ---------- Validation ----------
-  function setErr(id, msg) { const e = $(id + "Err"); e.textContent = msg || ""; e.hidden = !msg; }
-  function validate() {
-    let ok = true;
-    const s = parsePerson($("submitter").value);
-    if (!s || !s.ok || !s.rank) { setErr("submitter", "Enter your rank, then first and last name (e.g., C2C John Doe)."); ok = false; } else setErr("submitter");
-    const n = parsePerson($("nominee").value);
-    if (!n || !n.ok || !n.rank) { setErr("nominee", "Enter the cadet's rank, then first and last name (e.g., C3C Jane Smith)."); ok = false; } else setErr("nominee");
-    if ($("activity").value.trim().length < 15) { setErr("activity", "Add a few details about what they did."); ok = false; } else setErr("activity");
-    if (!$("reward").value.trim()) { setErr("reward", "Enter a recommended reward."); ok = false; } else setErr("reward");
-    return ok ? { s, n, activity: $("activity").value.trim(), reward: $("reward").value.trim() } : null;
+  function setErr(id, msg) {
+    const box = $(id + "Err"), input = $(id);
+    box.querySelector("span").textContent = msg || "";
+    box.hidden = !msg;
+    if (input) msg ? input.setAttribute("aria-invalid", "true") : input.removeAttribute("aria-invalid");
   }
+
+  function refresh() {
+    let done = 0;
+    for (const id in Q) {
+      const ok = !Q[id]($(id).value);
+      $("q-" + id).classList.toggle("done", ok);
+      if (ok) done++;
+      if (touched[id]) setErr(id, Q[id]($(id).value));
+    }
+    $("doneCount").textContent = done;
+    $("barFill").style.width = (done / 4 * 100) + "%";
+
+    const s = parsePerson($("submitter").value);
+    $("submitterPreview").innerHTML = s && s.ok
+      ? `On the form: <b>${esc(s.formal)}</b>${s.rank ? ` · Grade <b>${esc(s.rank)}</b>` : ""}` : "";
+    const n = parsePerson($("nominee").value);
+    $("nomineePreview").innerHTML = n && n.ok
+      ? `On the form: <b>${esc(n.formal)}</b>${classYearFor(n.rank) ? ` · Class of <b>${classYearFor(n.rank)}</b>` : ""}` : "";
+    const c = $("activity").value.trim().length;
+    $("activityCount").textContent = c + (c === 1 ? " character" : " characters");
+  }
+
+  for (const id in Q) {
+    $(id).addEventListener("input", refresh);
+    $(id).addEventListener("blur", () => { if ($(id).value.trim()) { touched[id] = true; refresh(); } });
+  }
+  // Enter moves to the next question instead of submitting early.
+  ["submitter", "nominee"].forEach((id, i, arr) => $(id).addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); $(["nominee", "activity"][i]).focus(); }
+  }));
+
+  function validate() {
+    const problems = [];
+    for (const id in Q) {
+      touched[id] = true;
+      const msg = Q[id]($(id).value);
+      setErr(id, msg);
+      if (msg) problems.push({ id, msg });
+    }
+    refresh();
+    const sum = $("summary");
+    if (problems.length) {
+      $("summaryList").innerHTML = problems.map(p => `<li><a href="#${p.id}" data-go="${p.id}">${esc(p.msg)}</a></li>`).join("");
+      sum.hidden = false; sum.focus();
+      sum.scrollIntoView({ block: "start", behavior: "smooth" });
+      return null;
+    }
+    sum.hidden = true;
+    return {
+      s: parsePerson($("submitter").value), n: parsePerson($("nominee").value),
+      activity: $("activity").value.trim(), reward: $("reward").value.trim()
+    };
+  }
+  $("summaryList").addEventListener("click", e => {
+    const a = e.target.closest("[data-go]"); if (!a) return;
+    e.preventDefault(); const el = $(a.dataset.go); el.focus(); el.scrollIntoView({ block: "center", behavior: "smooth" });
+  });
 
   // ---------- PDF build ----------
   let templateBytes = null;
@@ -309,15 +509,16 @@
 
   // ---------- Submit / send ----------
   let currentUrl = null;
+  const btn = $("submitBtn");
+  const btnIdle = btn.innerHTML;
   $("nomForm").addEventListener("submit", async e => {
     e.preventDefault();
     setErr("build");
     const d = validate();
-    if (!d) { document.querySelector(".error:not([hidden])")?.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
-    const btn = $("submitBtn");
-    btn.disabled = true; btn.textContent = "Building Form 10…";
+    if (!d) return;
+    btn.disabled = true; btn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span>Building Form 10…</span>';
     try {
-      if (!window.PDFLib) throw new Error("The PDF library didn't load. Check your connection and try again.");
+      if (!window.PDFLib) throw new Error("The PDF tool didn't load. Check your connection and try again.");
       const { bytes, fileName, t } = await buildPdf(d);
       const blob = new Blob([bytes], { type: "application/pdf" });
       const file = new File([blob], fileName, { type: "application/pdf" });
@@ -325,6 +526,7 @@
       currentUrl = URL.createObjectURL(blob);
 
       $("fileName").textContent = fileName;
+      $("fileMeta").textContent = `PDF · ${Math.max(1, Math.round(bytes.length / 1024))} KB · for ${d.n.display}`;
       const dl = $("downloadBtn"); dl.href = currentUrl; dl.download = fileName;
 
       const subject = `Positive Form 10 Nomination - ${d.n.display} (${CFG.squadron})`;
@@ -344,32 +546,40 @@
       const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
       const share = $("shareBtn");
       share.hidden = !canShare;
+      // With sharing available, Download becomes the secondary option.
+      $("downloadBtn").classList.toggle("secondary", canShare);
       share.onclick = async () => {
         try { await navigator.clipboard?.writeText(CFG.firstSergeantEmail); } catch {}
         try { await navigator.share({ files: [file], title: subject, text: `For ${CFG.firstSergeantEmail}: ${subject}` }); } catch {}
       };
       $("stepList").innerHTML = canShare
-        ? `<li>Tap <b>Share PDF</b> and pick Outlook or Teams. The First Sergeant's address is copied, so paste it into "To".</li>
+        ? `<li>Tap <b>Share PDF</b> and pick Outlook or Teams. The address above is already copied, so paste it into "To".</li>
            <li>Or tap <b>Download PDF</b>, then <b>Open email</b> and attach the file.</li>`
         : `<li>Tap <b>Download PDF</b>.</li>
-           <li>Tap <b>Open email to First Sergeant</b>. Everything's filled in, so just attach the downloaded PDF and send.</li>`;
+           <li>Tap <b>Open email to First Sergeant</b>. Everything is filled in, so attach the PDF and send.</li>`;
 
       $("nomForm").hidden = true;
+      $("pageTitle").hidden = true; $("pageLede").hidden = true;
       $("result").hidden = false;
       window.scrollTo({ top: 0, behavior: "smooth" });
+      $("resultTitle").focus({ preventScroll: true });
     } catch (err) {
       setErr("build", err.message || String(err));
     } finally {
-      btn.disabled = false; btn.textContent = "Create Form 10";
+      btn.disabled = false; btn.innerHTML = btnIdle;
     }
   });
 
   $("againBtn").addEventListener("click", () => {
-    $("nominee").value = ""; $("activity").value = ""; $("reward").value = "";
-    $("nomineePreview").textContent = "";
+    ["nominee", "activity", "reward"].forEach(id => { $(id).value = ""; delete touched[id]; setErr(id); });
+    refresh();
     $("result").hidden = true; $("nomForm").hidden = false;
+    $("pageTitle").hidden = false; $("pageLede").hidden = false;
     window.scrollTo({ top: 0 });
+    $("nominee").focus({ preventScroll: true });
   });
+
+  refresh();
 })();
 </script>
 </body>
