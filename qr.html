@@ -71,10 +71,9 @@
   .scan-hint { margin: 12px 0 0; font-weight: 700; color: var(--primary); font-size: 16px; }
 
   .steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0 0; padding: 0; text-align: left; }
-  .steps li { padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg); }
-  .steps .n { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #FFFFFF; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
-  .steps b { display: block; font-size: 16px; line-height: 1.25; }
-  .steps span.d { display: block; font-size: 14px; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+  .steps li { display: flex; flex-direction: column; justify-content: center; padding: 18px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg); }
+  .steps .n { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #FFFFFF; font-weight: 700; font-size: 20px; margin-bottom: 10px; }
+  .steps b { display: block; font-size: clamp(20px, 3.6vw, 24px); line-height: 1.2; }
 
   .foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 28px; border-top: 1px solid var(--line); background: var(--primary-soft); font-size: 14px; color: var(--ink-2); text-align: left; }
   .foot .url { font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; overflow-wrap: anywhere; }
@@ -136,15 +135,15 @@
 
     <div class="body">
       <h2>Saw someone go above and beyond?</h2>
-      <p class="sub">Nominate them for a positive Form 10. It takes about a minute.</p>
+      <p class="sub">Nominate them for a positive Form 10 in less than 2 minutes!</p>
 
       <div class="qr-tile"><span aria-hidden="true"></span><div id="qr" role="img" aria-label="QR code for the nomination form"></div></div>
       <p class="scan-hint">Point your phone camera here</p>
 
       <ol class="steps">
-        <li><span class="n">1</span><b>Scan</b><span class="d">Opens the form on your phone</span></li>
-        <li><span class="n">2</span><b>Answer 4 questions</b><span class="d">Who, what they did, and the reward</span></li>
-        <li><span class="n">3</span><b>Share the PDF</b><span class="d">Send it to the Cadet First Sergeant in Outlook or Teams</span></li>
+        <li><span class="n">1</span><b>Scan</b></li>
+        <li><span class="n">2</span><b>Answer 4 questions</b></li>
+        <li><span class="n">3</span><b>Share the PDF</b></li>
       </ol>
     </div>
 
