@@ -204,7 +204,7 @@
           <span class="num" aria-hidden="true"><span class="n">1</span><svg width="14" height="14"><use href="#i-check"/></svg></span>
           <div class="q-body">
             <label for="submitter">Your rank and name</label>
-            <p class="help" id="submitterHelp">For example, C2C John A. Doe</p>
+            <p class="help" id="submitterHelp">For example, C2C John Doe. Middle initial optional.</p>
             <input id="submitter" name="submitter" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="C2C John Doe" aria-describedby="submitterHelp submitterPreview submitterErr" required>
             <div class="meta"><span class="preview" id="submitterPreview" aria-live="polite"></span></div>
             <div class="error" id="submitterErr" hidden><svg width="16" height="16" aria-hidden="true"><use href="#i-alert"/></svg><span></span></div>
@@ -217,7 +217,7 @@
           <span class="num" aria-hidden="true"><span class="n">2</span><svg width="14" height="14"><use href="#i-check"/></svg></span>
           <div class="q-body">
             <label for="nominee">Rank and name of the cadet you're nominating</label>
-            <p class="help" id="nomineeHelp">For example, C3C Jane Smith</p>
+            <p class="help" id="nomineeHelp">For example, C3C Jane Smith. Middle initial optional.</p>
             <input id="nominee" name="nominee" autocomplete="off" autocapitalize="words" enterkeyhint="next" placeholder="C3C Jane Smith" aria-describedby="nomineeHelp nomineePreview nomineeErr" required>
             <div class="meta"><span class="preview" id="nomineePreview" aria-live="polite"></span></div>
             <div class="error" id="nomineeErr" hidden><svg width="16" height="16" aria-hidden="true"><use href="#i-alert"/></svg><span></span></div>
@@ -338,11 +338,12 @@
     const clean = w => w.replace(/[.,]+$/g, "");
     const first = clean(rest[0]);
     const last = clean(rest[rest.length - 1]);
+    // Middle initial is optional: used only when a middle name/initial is typed.
     const mi = rest.length >= 3 ? clean(rest[1]).charAt(0).toUpperCase() : "";
     return {
       ok: true, rank, first, last, mi,
       formal: mi ? `${last}, ${first}, ${mi}` : `${last}, ${first}`,
-      display: [rank, first, last].filter(Boolean).join(" ")
+      display: [rank, first, mi && mi + ".", last].filter(Boolean).join(" ")
     };
   }
 
@@ -502,8 +503,9 @@
     doc.setAuthor(d.s.display);
 
     const bytes = await doc.save();
-    const safe = s => s.replace(/[^A-Za-z0-9-]/g, "");
-    const fileName = `Form10_Positive_${safe(d.n.last)}-${safe(d.n.first)}_${t.iso}.pdf`;
+    // Named for the cadet being nominated, e.g. "Positive Form 10 - C2C Satyam K. Shah - 09 Nov 2026.pdf"
+    const safe = s => s.replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, " ").trim();
+    const fileName = `Positive Form 10 - ${safe(d.n.display)} - ${t.form}.pdf`;
     return { bytes, fileName, t };
   }
 
