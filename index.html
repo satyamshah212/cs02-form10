@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS-02 Positive Form 10</title>
+<meta name="description" content="Nominate a CS-02 cadet for a positive AFCW Form 10.">
+<!-- ===== SETTINGS: update the email when the acting First Sergeant changes ===== -->
+<script>
+  window.FORM10_CONFIG = {
+    squadron: "CS-02",
+    firstSergeantEmail: "c29satyam.shah@afacademy.af.edu"
+  };
+</script>
+<style>
+  :root {
+    --bg: #f4f6fa; --card: #ffffff; --text: #14213d; --muted: #5b6577;
+    --line: #d8dee8; --accent: #1d4ed8; --accent-ink: #ffffff; --ok: #0f7b4a;
+    --err: #b42318; --field: #ffffff; --hint-bg: #eef2ff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1220; --card: #151c2e; --text: #e7ecf5; --muted: #9aa6bb;
+      --line: #2a3550; --accent: #6b93ff; --accent-ink: #0d1220; --ok: #4ade80;
+      --err: #f87171; --field: #0f1626; --hint-bg: #1b2440;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 560px; margin: 0 auto; padding: 24px 16px 48px; }
+  header { margin-bottom: 20px; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .06em;
+         text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 26px; line-height: 1.2; margin: 4px 0 8px; }
+  header p { margin: 0; color: var(--muted); }
+  form, .result { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .q { margin-bottom: 20px; }
+  .q:last-of-type { margin-bottom: 24px; }
+  label { display: block; font-weight: 600; margin-bottom: 6px; }
+  .num { color: var(--accent); margin-right: 4px; }
+  .help { font-size: 14px; color: var(--muted); margin: -2px 0 8px; }
+  input, textarea {
+    width: 100%; font: inherit; color: var(--text); background: var(--field);
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+  }
+  textarea { min-height: 140px; resize: vertical; }
+  input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+  .preview { font-size: 13px; color: var(--muted); margin-top: 6px; min-height: 1em; }
+  .preview b { color: var(--text); font-weight: 600; }
+  .error { color: var(--err); font-size: 14px; margin-top: 6px; }
+  button, .btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; font: inherit; font-weight: 600; padding: 14px 16px; border-radius: 10px;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink);
+    cursor: pointer; text-decoration: none; margin-top: 10px;
+  }
+  .btn.secondary { background: transparent; color: var(--accent); }
+  button:disabled { opacity: .6; cursor: wait; }
+  .result h2 { margin: 0 0 4px; font-size: 20px; color: var(--ok); }
+  .result p { margin: 0 0 8px; }
+  .file { font-family: ui-monospace, Consolas, monospace; font-size: 13px; word-break: break-all; color: var(--muted); }
+  .steps { background: var(--hint-bg); border-radius: 10px; padding: 12px 14px; font-size: 14px; margin: 14px 0 4px; }
+  .steps ol { margin: 6px 0 0; padding-left: 20px; }
+  .email { font-weight: 600; word-break: break-all; }
+  footer { margin-top: 24px; font-size: 13px; color: var(--muted); text-align: center; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="tag" id="sqTag">CS-02</span>
+    <h1>Positive Form 10 nomination</h1>
+    <p>Saw a cadet do something worth recognizing? Answer 4 questions. Your phone fills in the AFCW Form 10, and you send it to the First Sergeant.</p>
+  </header>
+
+  <!-- onsubmit guard: the form must never submit natively (that would put answers in the URL). -->
+  <form id="nomForm" novalidate action="javascript:void 0" onsubmit="event.preventDefault()">
+    <div class="q">
+      <label for="submitter"><span class="num">1.</span>Your rank and name</label>
+      <p class="help">Example: C2C John A. Doe</p>
+      <input id="submitter" name="submitter" autocomplete="name" placeholder="C2C John Doe" required>
+      <div class="preview" id="submitterPreview"></div>
+      <div class="error" id="submitterErr" hidden></div>
+    </div>
+
+    <div class="q">
+      <label for="nominee"><span class="num">2.</span>Rank and name of the cadet you're nominating</label>
+      <p class="help">Example: C3C Jane Smith</p>
+      <input id="nominee" name="nominee" placeholder="C3C Jane Smith" required>
+      <div class="preview" id="nomineePreview"></div>
+      <div class="error" id="nomineeErr" hidden></div>
+    </div>
+
+    <div class="q">
+      <label for="activity"><span class="num">3.</span>What did they do?</label>
+      <p class="help">Who, what, when, where, and why it mattered.</p>
+      <textarea id="activity" name="activity" required></textarea>
+      <div class="error" id="activityErr" hidden></div>
+    </div>
+
+    <div class="q">
+      <label for="reward"><span class="num">4.</span>Recommended reward</label>
+      <input id="reward" name="reward" placeholder="e.g., 1 weekend pass" required>
+      <div class="error" id="rewardErr" hidden></div>
+    </div>
+
+    <button type="submit" id="submitBtn">Create Form 10</button>
+    <div class="error" id="buildErr" hidden></div>
+  </form>
+
+  <section class="result" id="result" hidden>
+    <h2>Form 10 ready</h2>
+    <p class="file" id="fileName"></p>
+
+    <div class="steps">
+      <strong>Send it to the acting First Sergeant:</strong>
+      <span class="email" id="fsEmail"></span>
+      <ol id="stepList"></ol>
+    </div>
+
+    <button type="button" id="shareBtn" hidden>Share PDF (Outlook, Teams…)</button>
+    <a class="btn" id="downloadBtn" download>Download PDF</a>
+    <a class="btn secondary" id="emailBtn">Open email to First Sergeant</a>
+    <button type="button" class="btn secondary" id="againBtn">Nominate someone else</button>
+  </section>
+
+  <footer>
+    Unofficial squadron tool. The PDF is built on your phone. Nothing is saved or sent anywhere until you send it yourself.
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script>
+(() => {
+  const CFG = window.FORM10_CONFIG;
+  const $ = id => document.getElementById(id);
+  $("sqTag").textContent = CFG.squadron;
+  $("fsEmail").textContent = CFG.firstSergeantEmail;
+
+  // ---------- Field names in the AFCW IMT 10 template ----------
+  const P = "topmostSubform[0].Page1[0].";
+  const F = {
+    cadetName: P + "TextField1[2]",   // Sec I Blk 1  (Last, First, MI)
+    squadron:  P + "TextField1[1]",   // Sec I Blk 2
+    classYear: P + "TextField1[0]",   // Sec I Blk 3
+    date:      P + "DateField1[0]",   // Sec I Blk 4
+    roName:    P + "TextField1[3]",   // Sec I Blk 5  (Last, First, MI)
+    roGrade:   P + "TextField1[5]",   // Sec I Blk 6
+    roOrg:     P + "TextField1[4]",   // Sec I Blk 7
+    mfrYes:    P + "CheckBox1[0]",    // Sec I Blk 8 YES
+    mfrNo:     P + "CheckBox1[1]",    // Sec I Blk 8 NO
+    narrative: P + "TextField1[6]"    // Sec II Conduct Narrative
+  };
+
+  // ---------- Rank + name parsing ----------
+  const RANKS = [
+    ["C1C"], ["C2C"], ["C3C"], ["C4C"],
+    ["2d Lt", "2nd Lt", "2Lt", "2d Lt."], ["1st Lt", "1Lt"], ["Capt"], ["Maj"], ["Lt Col", "LtCol"], ["Col"],
+    ["Brig Gen"], ["Maj Gen"], ["Lt Gen"], ["Gen"],
+    ["CMSgt"], ["SMSgt"], ["MSgt"], ["TSgt"], ["SSgt"], ["SrA"], ["A1C"], ["Amn"],
+    ["Mr."], ["Ms."], ["Mrs."], ["Dr."]
+  ];
+  const norm = s => s.toLowerCase().replace(/[.\s]/g, "");
+  const RANK_LOOKUP = [];
+  RANKS.forEach(group => group.forEach(v => RANK_LOOKUP.push({ key: norm(v), canon: group[0] })));
+  RANK_LOOKUP.sort((a, b) => b.key.length - a.key.length);
+
+  function parsePerson(raw) {
+    const text = raw.trim().replace(/\s+/g, " ");
+    if (!text) return null;
+    const words = text.split(" ");
+    let rank = "", rest = words;
+    // Try 1- and 2-word rank prefixes, longest first.
+    for (const n of [2, 1]) {
+      if (words.length <= n) continue;
+      const cand = norm(words.slice(0, n).join(" "));
+      const hit = RANK_LOOKUP.find(r => r.key === cand);
+      if (hit) { rank = hit.canon; rest = words.slice(n); break; }
+    }
+    if (rest.length < 2) return { rank, ok: false };
+    const clean = w => w.replace(/[.,]+$/g, "");
+    const first = clean(rest[0]);
+    const last = clean(rest[rest.length - 1]);
+    const mi = rest.length >= 3 ? clean(rest[1]).charAt(0).toUpperCase() : "";
+    return {
+      ok: true, rank, first, last, mi,
+      formal: mi ? `${last}, ${first}, ${mi}` : `${last}, ${first}`,
+      display: [rank, first, last].filter(Boolean).join(" ")
+    };
+  }
+
+  // C1C graduates at the end of the current academic year (rolls over in June).
+  function classYearFor(rank) {
+    const m = /^C([1-4])C$/.exec(rank || "");
+    if (!m) return "";
+    const now = new Date();
+    const gradYear = now.getMonth() >= 5 ? now.getFullYear() + 1 : now.getFullYear();
+    return String(gradYear + (Number(m[1]) - 1));
+  }
+
+  function showPreview(inputId, previewId, isNominee) {
+    const p = parsePerson($(inputId).value);
+    const el = $(previewId);
+    if (!p || !p.ok) { el.textContent = ""; return; }
+    let txt = `On the form: <b>${esc(p.formal)}</b>`;
+    if (p.rank) txt += isNominee ? ` · Class of <b>${classYearFor(p.rank) || "—"}</b>` : ` · Grade <b>${esc(p.rank)}</b>`;
+    else txt += " · <span style='color:var(--err)'>no rank recognized</span>";
+    el.innerHTML = txt;
+  }
+  const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  $("submitter").addEventListener("input", () => showPreview("submitter", "submitterPreview", false));
+  $("nominee").addEventListener("input", () => showPreview("nominee", "nomineePreview", true));
+
+  // ---------- Validation ----------
+  function setErr(id, msg) { const e = $(id + "Err"); e.textContent = msg || ""; e.hidden = !msg; }
+  function validate() {
+    let ok = true;
+    const s = parsePerson($("submitter").value);
+    if (!s || !s.ok || !s.rank) { setErr("submitter", "Enter your rank, then first and last name (e.g., C2C John Doe)."); ok = false; } else setErr("submitter");
+    const n = parsePerson($("nominee").value);
+    if (!n || !n.ok || !n.rank) { setErr("nominee", "Enter the cadet's rank, then first and last name (e.g., C3C Jane Smith)."); ok = false; } else setErr("nominee");
+    if ($("activity").value.trim().length < 15) { setErr("activity", "Add a few details about what they did."); ok = false; } else setErr("activity");
+    if (!$("reward").value.trim()) { setErr("reward", "Enter a recommended reward."); ok = false; } else setErr("reward");
+    return ok ? { s, n, activity: $("activity").value.trim(), reward: $("reward").value.trim() } : null;
+  }
+
+  // ---------- PDF build ----------
+  let templateBytes = null;
+  async function loadTemplate() {
+    if (!templateBytes) {
+      const res = await fetch("form10-template.pdf", { cache: "no-cache" });
+      if (!res.ok) throw new Error("Could not load the blank Form 10 (" + res.status + ").");
+      templateBytes = await res.arrayBuffer();
+    }
+    return templateBytes;
+  }
+
+  const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const MONTHS_LONG = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  function today() {
+    const d = new Date();
+    const pad = x => String(x).padStart(2, "0");
+    return {
+      form: `${pad(d.getDate())} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`,
+      long: `${d.getDate()} ${MONTHS_LONG[d.getMonth()]} ${d.getFullYear()}`,
+      iso: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+    };
+  }
+
+  function narrativeFor(d, t) {
+    return [
+      `This Form 10 is to recognize ${d.n.display} for exceptional performance.`,
+      "",
+      d.activity,
+      "",
+      `Recommended Reward: ${d.reward}`,
+      "",
+      `Submitted by ${d.s.display} on ${t.long}. Questions can be directed to ${d.s.display}.`
+    ].join("\n");
+  }
+
+  // pdf-lib's standard Helvetica only supports WinAnsi characters; swap smart punctuation etc.
+  function winAnsi(s) {
+    return s.replace(/[‘’‛]/g, "'").replace(/[“”‟]/g, '"')
+            .replace(/[–—]/g, "-").replace(/…/g, "...").replace(/ /g, " ")
+            .replace(/[^\x09\x0A\x0D\x20-\x7E -ÿ]/g, "");
+  }
+
+  async function buildPdf(d) {
+    const { PDFDocument, StandardFonts } = PDFLib;
+    const doc = await PDFDocument.load(await loadTemplate());
+    const form = doc.getForm();
+    const t = today();
+    const set = (name, val, size) => {
+      const f = form.getTextField(name);
+      // The original form's font settings are malformed; reset them to plain Helvetica.
+      const da = `/Helv ${size || 8} Tf 0 g`;
+      f.acroField.setDefaultAppearance(da);
+      f.acroField.getWidgets().forEach(w => w.setDefaultAppearance(da));
+      f.setText(winAnsi(val));
+    };
+    set(F.cadetName, d.n.formal);
+    set(F.squadron, CFG.squadron);
+    set(F.classYear, classYearFor(d.n.rank));
+    set(F.date, t.form);
+    set(F.roName, d.s.formal);
+    set(F.roGrade, d.s.rank);
+    set(F.roOrg, CFG.squadron);
+    set(F.narrative, narrativeFor(d, t), 10);
+    form.getCheckBox(F.mfrYes).uncheck();
+    form.getCheckBox(F.mfrNo).check();
+
+    const helv = await doc.embedFont(StandardFonts.Helvetica);
+    form.updateFieldAppearances(helv);
+    doc.setTitle(`Positive Form 10 - ${d.n.display}`);
+    doc.setSubject(`AFCW IMT 10 positive nomination, ${CFG.squadron}`);
+    doc.setAuthor(d.s.display);
+
+    const bytes = await doc.save();
+    const safe = s => s.replace(/[^A-Za-z0-9-]/g, "");
+    const fileName = `Form10_Positive_${safe(d.n.last)}-${safe(d.n.first)}_${t.iso}.pdf`;
+    return { bytes, fileName, t };
+  }
+
+  // ---------- Submit / send ----------
+  let currentUrl = null;
+  $("nomForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    setErr("build");
+    const d = validate();
+    if (!d) { document.querySelector(".error:not([hidden])")?.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+    const btn = $("submitBtn");
+    btn.disabled = true; btn.textContent = "Building Form 10…";
+    try {
+      if (!window.PDFLib) throw new Error("The PDF library didn't load. Check your connection and try again.");
+      const { bytes, fileName, t } = await buildPdf(d);
+      const blob = new Blob([bytes], { type: "application/pdf" });
+      const file = new File([blob], fileName, { type: "application/pdf" });
+      if (currentUrl) URL.revokeObjectURL(currentUrl);
+      currentUrl = URL.createObjectURL(blob);
+
+      $("fileName").textContent = fileName;
+      const dl = $("downloadBtn"); dl.href = currentUrl; dl.download = fileName;
+
+      const subject = `Positive Form 10 Nomination - ${d.n.display} (${CFG.squadron})`;
+      const body = [
+        `Attached is a positive Form 10 nomination (${fileName}).`,
+        "",
+        `Cadet: ${d.n.display}, ${CFG.squadron}, Class of ${classYearFor(d.n.rank)}`,
+        `Submitted by: ${d.s.display}`,
+        `Date: ${t.form}`,
+        "",
+        `What they did: ${d.activity}`,
+        "",
+        `Recommended reward: ${d.reward}`
+      ].join("\n");
+      $("emailBtn").href = `mailto:${CFG.firstSergeantEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+      const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
+      const share = $("shareBtn");
+      share.hidden = !canShare;
+      share.onclick = async () => {
+        try { await navigator.clipboard?.writeText(CFG.firstSergeantEmail); } catch {}
+        try { await navigator.share({ files: [file], title: subject, text: `For ${CFG.firstSergeantEmail}: ${subject}` }); } catch {}
+      };
+      $("stepList").innerHTML = canShare
+        ? `<li>Tap <b>Share PDF</b> and pick Outlook or Teams. The First Sergeant's address is copied, so paste it into "To".</li>
+           <li>Or tap <b>Download PDF</b>, then <b>Open email</b> and attach the file.</li>`
+        : `<li>Tap <b>Download PDF</b>.</li>
+           <li>Tap <b>Open email to First Sergeant</b>. Everything's filled in, so just attach the downloaded PDF and send.</li>`;
+
+      $("nomForm").hidden = true;
+      $("result").hidden = false;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      setErr("build", err.message || String(err));
+    } finally {
+      btn.disabled = false; btn.textContent = "Create Form 10";
+    }
+  });
+
+  $("againBtn").addEventListener("click", () => {
+    $("nominee").value = ""; $("activity").value = ""; $("reward").value = "";
+    $("nomineePreview").textContent = "";
+    $("result").hidden = true; $("nomForm").hidden = false;
+    window.scrollTo({ top: 0 });
+  });
+})();
+</script>
+</body>
+</html>

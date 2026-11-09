@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Form 10 QR Sign</title>
+<style>
+  :root { --bg: #ffffff; --text: #14213d; --muted: #5b6577; --line: #d8dee8; --accent: #1d4ed8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .controls { max-width: 640px; margin: 0 auto; padding: 16px; border-bottom: 1px solid var(--line); }
+  .controls label { font-weight: 600; display: block; margin-bottom: 6px; }
+  .controls input { width: 100%; font: inherit; padding: 10px; border: 1px solid var(--line); border-radius: 8px; }
+  .controls p { font-size: 14px; color: var(--muted); margin: 8px 0 0; }
+  .controls button { margin-top: 10px; font: inherit; font-weight: 600; padding: 10px 16px; border-radius: 8px; border: 0; background: var(--accent); color: #fff; cursor: pointer; }
+  .sign { max-width: 640px; margin: 24px auto; padding: 32px 16px; text-align: center; }
+  .sign .sq { font-weight: 700; letter-spacing: .1em; color: var(--accent); }
+  .sign h1 { font-size: 34px; line-height: 1.15; margin: 6px 0 12px; }
+  .sign .sub { font-size: 18px; color: var(--muted); margin: 0 auto 20px; max-width: 30em; }
+  #qr svg { width: min(340px, 80vw); height: auto; }
+  .url { font-family: ui-monospace, Consolas, monospace; font-size: 13px; color: var(--muted); word-break: break-all; margin-top: 10px; }
+  @media print { .controls { display: none; } .sign { margin: 0 auto; } }
+</style>
+</head>
+<body>
+  <div class="controls">
+    <label for="url">Link the QR code opens</label>
+    <input id="url">
+    <p>This defaults to the nomination page next to this file. Change it if the site lives somewhere else. Use the same link for an NFC sticker (write it as a "URL" record).</p>
+    <button onclick="window.print()">Print sign</button>
+  </div>
+
+  <div class="sign">
+    <div class="sq">CS-02</div>
+    <h1>Saw someone go above and beyond?</h1>
+    <p class="sub">Scan to nominate them for a positive Form 10. It takes about a minute.</p>
+    <div id="qr"></div>
+    <div class="url" id="urlText"></div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+  const input = document.getElementById("url");
+  input.value = new URL("./", location.href).href;
+  function draw() {
+    const q = qrcode(0, "M");
+    q.addData(input.value.trim());
+    q.make();
+    document.getElementById("qr").innerHTML = q.createSvgTag({ cellSize: 8, margin: 2, scalable: true });
+    document.getElementById("urlText").textContent = input.value.trim();
+  }
+  input.addEventListener("input", draw);
+  draw();
+</script>
+</body>
+</html>
