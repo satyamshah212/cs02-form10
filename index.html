@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CS-02 Positive Form 10</title>
 <meta name="description" content="Nominate a CS-02 cadet for a positive AFCW Form 10 in four questions.">
-<meta name="theme-color" content="#0F172A">
+<meta name="theme-color" content="#047857">
 <!-- ===== SETTINGS: update the email when the acting First Sergeant changes ===== -->
 <script>
   window.FORM10_CONFIG = {
@@ -17,22 +17,25 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* Design system: ui-ux-pro-max "Minimalism & Swiss" + Government navy palette, Atkinson Hyperlegible. */
+  /* Design system: ui-ux-pro-max "Minimalism & Swiss" style, Atkinson Hyperlegible. */
+  /* Palette: emerald (approval, growth) + award gold on warm off-white. Positive tone, no navy. */
   :root {
-    --bg: #F8FAFC; --card: #FFFFFF; --ink: #020617; --ink-2: #334155; --muted: #475569;
-    --line: #E2E8F0; --line-strong: #CBD5E1; --primary: #0F172A; --on-primary: #FFFFFF;
-    --accent: #0369A1; --accent-soft: #E0F2FE; --ok: #15803D; --ok-soft: #DCFCE7;
-    --err: #DC2626; --err-soft: #FEF2F2; --field: #FFFFFF; --ring: #0369A1;
+    --bg: #FBF8F1; --card: #FFFFFF; --ink: #1C1917; --ink-2: #44403C; --muted: #57534E;
+    --line: #ECE6DA; --line-strong: #D6CEBF; --primary: #047857; --on-primary: #FFFFFF;
+    --accent: #047857; --accent-soft: #ECFDF5; --ok: #047857; --ok-soft: #D1FAE5;
+    --gold: #F59E0B; --on-gold: #1C1917;
+    --err: #DC2626; --err-soft: #FEF2F2; --field: #FFFFFF; --ring: #047857;
     --radius: 10px; --radius-lg: 14px;
     --ease: cubic-bezier(.2, .7, .2, 1);
     --font: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #020617; --card: #0F172A; --ink: #F1F5F9; --ink-2: #CBD5E1; --muted: #94A3B8;
-      --line: #1E293B; --line-strong: #334155; --primary: #F1F5F9; --on-primary: #020617;
-      --accent: #38BDF8; --accent-soft: #0C2A3E; --ok: #4ADE80; --ok-soft: #052E16;
-      --err: #F87171; --err-soft: #2A0A0A; --field: #020617; --ring: #38BDF8;
+      --bg: #171512; --card: #211F1B; --ink: #F5F2EC; --ink-2: #D6D3CD; --muted: #A8A29E;
+      --line: #2F2C27; --line-strong: #46423B; --primary: #34D399; --on-primary: #052E1C;
+      --accent: #34D399; --accent-soft: #10291F; --ok: #34D399; --ok-soft: #10291F;
+      --gold: #FBBF24; --on-gold: #1C1917;
+      --err: #F87171; --err-soft: #2A1414; --field: #171512; --ring: #34D399;
     }
   }
   * { box-sizing: border-box; }
@@ -50,7 +53,7 @@
   .masthead { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
   .mark {
     width: 44px; height: 44px; border-radius: 10px; flex: none;
-    display: grid; place-items: center; background: var(--primary); color: var(--on-primary);
+    display: grid; place-items: center; background: var(--gold); color: var(--on-gold);
     font-weight: 700; font-size: 13px; letter-spacing: .04em;
   }
   .masthead .unit { font-weight: 700; font-size: 15px; line-height: 1.2; }
