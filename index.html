@@ -147,6 +147,41 @@
   .to li + li { margin-top: 4px; }
   .actions { margin-top: 8px; }
 
+  /* ---------- PDF preview ---------- */
+  .preview-frame {
+    position: relative; display: block; width: 100%; margin: 12px 0 0; padding: 0;
+    background: #FFFFFF; border: 1px solid var(--line-strong); border-radius: var(--radius);
+    overflow: hidden; cursor: zoom-in; aspect-ratio: 612 / 792; font: inherit; color: #57534E;
+    box-shadow: 0 6px 20px -12px rgba(28, 25, 23, .35);
+    transition: transform .15s var(--ease), box-shadow .2s var(--ease);
+  }
+  .preview-frame:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -12px rgba(28, 25, 23, .45); }
+  .preview-frame:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+  .preview-frame canvas { display: block; width: 100%; height: 100%; }
+  .preview-loading { position: absolute; inset: 0; display: flex; gap: 10px; align-items: center; justify-content: center; font-size: 15px; }
+  .preview-hint {
+    position: absolute; right: 10px; bottom: 10px; display: inline-flex; gap: 6px; align-items: center;
+    padding: 6px 10px; border-radius: 99px; font-size: 13px; font-weight: 700;
+    background: rgba(28, 25, 23, .82); color: #FFFFFF;
+  }
+  .preview-fail { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
+
+  dialog#viewer { padding: 0; border: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; background: #2A2723; color: #FFFFFF; }
+  dialog#viewer::backdrop { background: rgba(0, 0, 0, .6); }
+  .viewer-bar { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: max(8px, env(safe-area-inset-top)) 8px 8px 16px; background: #1C1917; font-weight: 700; font-size: 15px; }
+  .viewer-bar span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .viewer-tools { display: flex; gap: 2px; flex: none; }
+  .icon-btn:disabled { opacity: .35; cursor: default; }
+  .icon-btn { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 10px; background: transparent; color: inherit; cursor: pointer; }
+  .icon-btn:hover { background: rgba(255, 255, 255, .12); }
+  .icon-btn:focus-visible { outline: 3px solid #34D399; outline-offset: 1px; }
+  .viewer-body { height: calc(100% - 60px); overflow: auto; -webkit-overflow-scrolling: touch; padding: 12px; }
+  .viewer-body canvas { display: block; background: #FFFFFF; margin: 0 auto; }
+
+  /* ---------- Email fallback ---------- */
+  .fallback { margin-top: 10px; padding: 14px; border: 1px dashed var(--line-strong); border-radius: var(--radius); }
+  .fallback p { margin: 0; font-size: 15px; color: var(--ink-2); }
+
   footer { margin-top: 26px; font-size: 14px; color: var(--muted); display: flex; gap: 10px; align-items: flex-start; }
   footer svg { flex: none; margin-top: 2px; }
 
@@ -173,7 +208,10 @@
   <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4"/><path d="M12 2v13"/></symbol>
   <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></symbol>
   <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></symbol>
+  <symbol id="i-zoom" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></symbol>
+  <symbol id="i-x"viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-plus"viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></symbol>
 </svg>
 
 <main>
@@ -271,6 +309,14 @@
       <div><div class="fname" id="fileName"></div><div class="fmeta" id="fileMeta">PDF · AFCW IMT 10</div></div>
     </div>
 
+    <!-- In-page preview: page 1 drawn with pdf.js so it works on iPhone and Android without downloading. -->
+    <button type="button" class="preview-frame" id="previewBtn" aria-label="Open a larger view of the Form 10">
+      <div class="preview-loading" id="previewLoading"><span class="spinner" aria-hidden="true"></span><span>Loading preview…</span></div>
+      <canvas id="previewCanvas" hidden></canvas>
+      <span class="preview-hint" id="previewHint" hidden><svg width="14" height="14" aria-hidden="true"><use href="#i-zoom"/></svg>Tap to enlarge</span>
+    </button>
+    <p class="preview-fail" id="previewFail" hidden>Preview isn't available on this device. Download the PDF to view it.</p>
+
     <div class="to">
       <div class="k">Send to</div>
       <div class="v" id="fsEmail"></div>
@@ -281,9 +327,26 @@
       <button type="button" class="btn" id="shareBtn" hidden><svg width="20" height="20" aria-hidden="true"><use href="#i-share"/></svg><span>Share PDF to Outlook or Teams</span></button>
       <a class="btn" id="downloadBtn" download><svg width="20" height="20" aria-hidden="true"><use href="#i-download"/></svg><span>Download PDF</span></a>
       <a class="btn secondary" id="emailBtn"><svg width="20" height="20" aria-hidden="true"><use href="#i-mail"/></svg><span>Open email to First Sergeant</span></a>
+      <div class="fallback" id="emailFallback" hidden>
+        <p><b>Email app didn't open?</b> The address is copied, so you can paste it into any email. Or use Outlook on the web:</p>
+        <a class="btn secondary" id="owaBtn" target="_blank" rel="noopener"><svg width="20" height="20" aria-hidden="true"><use href="#i-mail"/></svg><span>Open Outlook on the web</span></a>
+        <button type="button" class="btn quiet" id="copyBtn"><span id="copyLabel">Copy address again</span></button>
+      </div>
       <button type="button" class="btn quiet" id="againBtn"><svg width="18" height="18" aria-hidden="true"><use href="#i-plus"/></svg><span>Nominate someone else</span></button>
     </div>
   </section>
+
+  <dialog id="viewer" aria-label="Form 10 full view">
+    <div class="viewer-bar">
+      <span id="viewerTitle">Form 10</span>
+      <div class="viewer-tools">
+        <button type="button" class="icon-btn" id="zoomOut" aria-label="Zoom out"><svg width="22" height="22" aria-hidden="true"><use href="#i-minus"/></svg></button>
+        <button type="button" class="icon-btn" id="zoomIn" aria-label="Zoom in"><svg width="22" height="22" aria-hidden="true"><use href="#i-plus"/></svg></button>
+        <button type="button" class="icon-btn" id="viewerClose" aria-label="Close full view"><svg width="22" height="22" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+    </div>
+    <div class="viewer-body" id="viewerBody"><canvas id="viewerCanvas"></canvas></div>
+  </dialog>
 
   <footer data-enter="3">
     <svg width="16" height="16" aria-hidden="true"><use href="#i-lock"/></svg>
@@ -534,19 +597,25 @@
       $("fileMeta").textContent = `PDF · ${Math.max(1, Math.round(bytes.length / 1024))} KB · for ${d.n.display}`;
       const dl = $("downloadBtn"); dl.href = currentUrl; dl.download = fileName;
 
+      // Keep the email link short: some mail apps (notably Outlook on Windows) silently ignore
+      // mailto links over ~2,000 characters. The full write-up is in the PDF anyway.
       const subject = `Positive Form 10 Nomination - ${d.n.display} (${CFG.squadron})`;
+      const short = (s, n) => s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s;
       const body = [
         `Attached is a positive Form 10 nomination (${fileName}).`,
         "",
         `Cadet: ${d.n.display}, ${CFG.squadron}, Class of ${classYearFor(d.n.rank)}`,
         `Submitted by: ${d.s.display}`,
-        `Date: ${t.form}`,
+        `Recommended reward: ${short(d.reward, 120)}`,
         "",
-        `What they did: ${d.activity}`,
-        "",
-        `Recommended reward: ${d.reward}`
+        `Summary: ${short(d.activity, 300)}`
       ].join("\n");
-      $("emailBtn").href = `mailto:${CFG.firstSergeantEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const q = `subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      $("emailBtn").href = `mailto:${CFG.firstSergeantEmail}?${q}`;
+      $("owaBtn").href = `https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(CFG.firstSergeantEmail)}&${q}`;
+      $("emailFallback").hidden = true;
+
+      renderPreview(bytes, d.n.display);
 
       const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
       const share = $("shareBtn");
@@ -574,6 +643,95 @@
       btn.disabled = false; btn.innerHTML = btnIdle;
     }
   });
+
+  // ---------- Email button: copy the address, then show a fallback if no mail app opens ----------
+  async function copyAddress() {
+    try { await navigator.clipboard.writeText(CFG.firstSergeantEmail); return true; }
+    catch {
+      const t = document.createElement("textarea"); t.value = CFG.firstSergeantEmail;
+      t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
+      document.body.appendChild(t); t.select();
+      let ok = false; try { ok = document.execCommand("copy"); } catch {}
+      t.remove(); return ok;
+    }
+  }
+  $("emailBtn").addEventListener("click", () => {
+    copyAddress();
+    // If the page is still visible a moment later, the mail app most likely didn't open.
+    setTimeout(() => { if (document.visibilityState === "visible") $("emailFallback").hidden = false; }, 1200);
+  });
+  $("copyBtn").addEventListener("click", async () => {
+    const ok = await copyAddress();
+    $("copyLabel").textContent = ok ? "Copied!" : CFG.firstSergeantEmail;
+    setTimeout(() => { $("copyLabel").textContent = "Copy address again"; }, 2000);
+  });
+
+  // ---------- PDF preview (pdf.js, loaded only when needed) ----------
+  const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+  let pdfjsReady = null, previewPage = null;
+  function loadPdfJs() {
+    if (!pdfjsReady) pdfjsReady = new Promise((res, rej) => {
+      const s = document.createElement("script");
+      s.src = PDFJS + "pdf.min.js";
+      s.onload = () => { pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js"; res(pdfjsLib); };
+      s.onerror = () => { pdfjsReady = null; rej(new Error("preview library failed to load")); };
+      document.head.appendChild(s);
+    });
+    return pdfjsReady;
+  }
+  async function drawPage(page, canvas, cssWidth) {
+    const base = page.getViewport({ scale: 1 });
+    // Cap the bitmap at ~3,300 px wide so iPhones (16.7 MP canvas limit) never fail to draw.
+    const dpr = Math.min(window.devicePixelRatio || 1, 3, 3300 / cssWidth);
+    const vp = page.getViewport({ scale: (cssWidth / base.width) * dpr });
+    canvas.width = Math.floor(vp.width); canvas.height = Math.floor(vp.height);
+    canvas.style.width = cssWidth + "px"; canvas.style.height = (cssWidth * base.height / base.width) + "px";
+    // ENABLE draws the filled-in form fields onto the page.
+    await page.render({ canvasContext: canvas.getContext("2d"), viewport: vp, annotationMode: pdfjsLib.AnnotationMode.ENABLE }).promise;
+  }
+  async function renderPreview(bytes, who) {
+    const canvas = $("previewCanvas");
+    $("previewBtn").hidden = false; $("previewFail").hidden = true;
+    $("previewLoading").hidden = false; canvas.hidden = true; $("previewHint").hidden = true;
+    $("viewerTitle").textContent = `Form 10 · ${who}`;
+    try {
+      const lib = await loadPdfJs();
+      const doc = await lib.getDocument({ data: bytes.slice(0) }).promise;
+      previewPage = await doc.getPage(1);
+      canvas.hidden = false;
+      await drawPage(previewPage, canvas, $("previewBtn").clientWidth || 340);
+      canvas.style.width = "100%"; canvas.style.height = "100%";
+      $("previewLoading").hidden = true; $("previewHint").hidden = false;
+    } catch (err) {
+      $("previewBtn").hidden = true; $("previewFail").hidden = false;
+    }
+  }
+  // Full view: opens fitted to the screen width; + / - step through zoom levels.
+  const ZOOMS = [1, 1.5, 2, 3];
+  let zoomIdx = 0;
+  async function drawViewer() {
+    const body = $("viewerBody");
+    const fit = Math.min(body.clientWidth - 24, 1100);
+    // Keep the same spot centred when zooming.
+    const cx = (body.scrollLeft + body.clientWidth / 2) / (body.scrollWidth || 1);
+    const cy = (body.scrollTop + body.clientHeight / 2) / (body.scrollHeight || 1);
+    await drawPage(previewPage, $("viewerCanvas"), Math.round(fit * ZOOMS[zoomIdx]));
+    body.scrollLeft = cx * body.scrollWidth - body.clientWidth / 2;
+    body.scrollTop = cy * body.scrollHeight - body.clientHeight / 2;
+    $("zoomOut").disabled = zoomIdx === 0;
+    $("zoomIn").disabled = zoomIdx === ZOOMS.length - 1;
+  }
+  $("previewBtn").addEventListener("click", async () => {
+    if (!previewPage) return;
+    const dlg = $("viewer");
+    if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+    zoomIdx = 0; $("viewerBody").scrollTop = 0; $("viewerBody").scrollLeft = 0;
+    await drawViewer();
+  });
+  $("zoomIn").addEventListener("click", () => { if (zoomIdx < ZOOMS.length - 1) { zoomIdx++; drawViewer(); } });
+  $("zoomOut").addEventListener("click", () => { if (zoomIdx > 0) { zoomIdx--; drawViewer(); } });
+  $("viewerClose").addEventListener("click", () => { const d = $("viewer"); d.close ? d.close() : d.removeAttribute("open"); });
+  $("viewer").addEventListener("click", e => { if (e.target === $("viewer")) $("viewer").close(); });
 
   $("againBtn").addEventListener("click", () => {
     ["nominee", "activity", "reward"].forEach(id => { $(id).value = ""; delete touched[id]; setErr(id); });
